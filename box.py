@@ -46,8 +46,8 @@ class Box(Shape):
 			line = []
 			for i in xrange(0, steps, 1):
 				j = float(i)/steps
-				x = pt1['x'] - (xdiff * j)
-				y = pt1['y'] - (ydiff * j)
+				x = pt1['x'] - (xdiff * j) + self.x
+				y = pt1['y'] - (ydiff * j) + self.y
 				line.append((x, y, r, g, b))
 			return line
 

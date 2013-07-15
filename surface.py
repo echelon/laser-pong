@@ -46,26 +46,39 @@ class Surface(object):
 		self.ratioFloat = self.width / (self.height*1.0)
 		self.ratio = int(round(self.ratioFloat))
 
-		self.rows = 4
-		self.cols = 4
+		self.rows = 0
+		self.cols = 0
+		self.cellWidth = 0 # width/cols
+		self.cellHeight = 0 # height/rows
+
+		self.setGrid(4, 4)
 
 		if self.ratioFloat < 0.75:
-			self.rows = 4
-			self.cols = 2
+			self.setGrid(rows=4, cols=2)
 
 		elif self.ratioFloat > 1.25:
-			self.rows = 2
-			self.cols = 4
+			self.setGrid(rows=2, cols=4)
 
+	def setGrid(self, rows, cols):
+		self.rows = rows
+		self.cols = cols
 		self.cellWidth = self.width / self.cols
 		self.cellHeight = self.height / self.rows
 
-		print self.width, self.height
-		print self.cellWidth, self.cellHeight
+	def getGridCenter(self, gridNum):
+		row = gridNum / self.rows
+		col = gridNum % self.cols
+
+		print gridNum, row, col
+
+		x = (row * self.cellWidth) + self.xMin + self.cellWidth/2
+		y = (col * self.cellHeight) + self.yMin + self.cellHeight/2
+
+		return (x, y)
+
 
 	def getCenter(self):
 		return self.center
-
 
 	def inCell(self, x, y=None):
 		if type(x) == dict and 'x' in x:
