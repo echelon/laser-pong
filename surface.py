@@ -86,3 +86,37 @@ class Surface(object):
 
 		return cell
 
+	#
+	# See if an object is outside of the bounding box
+	#
+
+	def isAbove(self, y, obj):
+		return y + obj.top > self.yMax
+
+	def isBelow(self, y, obj):
+		return y + obj.bottom < self.yMin
+
+	def isLeft(self, x, obj):
+		return x + obj.left > self.xMax
+
+	def isRight(self, x, obj):
+		return x + obj.right < self.xMin
+
+
+	#
+	# Calculate the extremest coordinate that an object can be.
+	#
+
+	def topMost(self, obj):
+		return self.yMax - obj.top
+
+	def bottomMost(self, obj):
+		return self.yMin - obj.bottom
+
+	def leftMost(self, obj):
+		return self.xMax - obj.left
+
+	def rightMost(self, obj):
+		return self.xMin - obj.right
+
+

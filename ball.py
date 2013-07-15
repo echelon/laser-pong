@@ -29,8 +29,22 @@ class Ball(Entity):
 
 		self.radius = radius
 
+		# Bounding box calculation
+		# Bottom should be negative of relative (0, 0) coord!
+		self.top = radius
+		self.bottom = -radius
+		self.left = radius
+		self.right = -radius
+
 		self.samplePts = 100
 		self.sampleCompensate = 100
+
+	def setRadius(self, radius):
+		self.radius = radius
+		self.top = radius
+		self.bottom = -radius
+		self.left = radius
+		self.right = -radius
 
 	def produce(self):
 		"""
@@ -43,8 +57,8 @@ class Ball(Entity):
 
 		for i in xrange(0, self.samplePts, 1):
 			i = float(i) / self.samplePts * 2 * math.pi
-			x = int(math.cos(i) * rad)
-			y = int(math.sin(i) * rad)
+			x = int(math.cos(i) * rad) + self.x
+			y = int(math.sin(i) * rad) + self.y
 			pt = (x, y, r, g, b)
 			pts.append(pt)
 			yield pt

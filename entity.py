@@ -6,6 +6,18 @@ class Entity(Shape):
 
 		super(Entity, self).__init__(x, y, r, g, b)
 
+		self.xVel = 0
+		self.yVel = 0
+
+		# Bounding box calculation
+		# Bottom should be negative of relative (0, 0) coord!
+		self.top = 0
+		self.bottom = 0
+		self.left = 0
+		self.right = 0
+
+		self.collisionRadius = 0
+
 	def setX(self, x):
 		self.x = x
 
@@ -13,7 +25,7 @@ class Entity(Shape):
 		self.y = y
 
 	def setPos(self, x, y=0):
-		if type(x) == dict:
+		if type(x) == dict and 'x' in x:
 			self.x = x['x']
 			self.y = x['y']
 			return
