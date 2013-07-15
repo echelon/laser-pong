@@ -2,11 +2,11 @@ from lib.common import *
 from lib.shape import *
 from entity import *
 
-class Paddle(Entity):
+class Box(Shape):
 
 	def __init__(self, x = 0, y = 0, r = 0, g = 0, b = 0):
 
-		super(Paddle, self).__init__(x, y, r, g, b)
+		super(Box, self).__init__(x, y, r, g, b)
 
 		self.drawn = False
 		self.pauseFirst = True
@@ -19,10 +19,10 @@ class Paddle(Entity):
 		self.g = CMAX
 		self.b = CMAX
 
-		self.width = 1000
-		self.height = 7000
+		self.width = 100
+		self.height = 100
 
-		self.edgeSamplePts = 10
+		self.edgeSamplePts = 40
 		self.vertSamplePts = 10
 
 	def produce(self):
@@ -39,11 +39,6 @@ class Paddle(Entity):
 		pts.append({'x': w, 'y': -h})
 		pts.append({'x': -w, 'y': -h})
 		pts.append({'x': -w, 'y': h})
-
-		# Translate points
-		for pt in pts:
-			pt['x'] += self.x
-			pt['y'] += self.y
 
 		def make_line(pt1, pt2, steps=200):
 			xdiff = pt1['x'] - pt2['x']
