@@ -26,16 +26,26 @@ from lib.shape import Shape
 from paddle import *
 from square import *
 
-paddle1 = Square()
-#paddle2 = Paddle()
+ps = PointStream()
+ps.showBlanking = False
+ps.showTracking = False
+ps.trackingSamplePts = 15
+ps.blankingSamplePts = 15
 
-#ps.objects.append(paddle2)
+paddle1 = Paddle()
+paddle2 = Paddle()
+paddle3 = Paddle()
+
+paddle1.x = -10000
+paddle2.x = 10000
+paddle3.y = 10000
+
+ps.objects.append(paddle1)
+ps.objects.append(paddle2)
+ps.objects.append(paddle3)
 
 def dac_thread():
-	global paddle1
-
-	ps = PointStream()
-	ps.objects.append(paddle1)
+	global ps
 
 	while True:
 		try:

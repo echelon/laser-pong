@@ -1,3 +1,4 @@
+from lib.common import *
 from lib.shape import *
 from entity import *
 
@@ -17,11 +18,15 @@ class Paddle(Shape):
 		self.x = x
 		self.y = y
 
-		self.width = 100
-		self.height = 100
+		self.r = CMAX
+		self.g = CMAX
+		self.b = CMAX
 
-		self.edgeSamplePts = 100
-		self.vertSamplePts = 100
+		self.width = 1000
+		self.height = 7000
+
+		self.edgeSamplePts = 10
+		self.vertSamplePts = 10
 
 	"""
 	def makePointsStatic(self):
