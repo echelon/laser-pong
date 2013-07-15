@@ -43,6 +43,8 @@ class PointStream(object):
 		self.rotate = 0.0
 		self.translateX = 0
 		self.translateY = 0
+		self.flipX = False
+		self.flipY = False
 
 		# Tweakable parameters
 		self.showTracking = SHOW_TRACKING_PATH
@@ -85,6 +87,13 @@ class PointStream(object):
 		# Global Translate
 		x += self.translateX
 		y += self.translateY
+
+		# Flip Coordinate about x/y axis
+		if self.flipX:
+			x *= -1
+
+		if self.flipY:
+			y *= -1
 
 		return (int(x), int(y), r, g, b)
 

@@ -1,16 +1,29 @@
 """
 Represent various videogame controllers
-
 TODO: Various play schemes/configs
 XXX: UNTESTED
 """
 
 import re
+import pygame
 
-def setup_controls(joystick):
+def init_controls(num):
 	"""
 	Joystick wrapper.
 	"""
+
+	pygame.joystick.init()
+	pygame.display.init()
+
+	# Wait until we have joystick
+	# TODO: Doesn't handle unplugged
+	while not pygame.joystick.get_count():
+		print "No joystick detected!"
+		time.sleep(5)
+
+	joystick = pygame.joystick.Joystick(num)
+	joystick.init()
+
 	if re.search('playstation', joystick.get_name(), re.I):
 		return Ps3Controller(joystick)
 
@@ -24,6 +37,10 @@ class Controller(object):
 	def __init__(self, joystick):
 		"""Pass a PyGame joystick instance."""
 		self.js = joystick
+
+	# Call at beginning of main loop
+	def getEvent(self):
+		return pygame.event.get()
 
 	def getLeftHori(self):
 		return 0.0

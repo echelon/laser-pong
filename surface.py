@@ -69,7 +69,7 @@ class Surface(object):
 		row = gridNum / self.rows
 		col = gridNum % self.cols
 
-		print gridNum, row, col
+		#print gridNum, row, col
 
 		x = (row * self.cellWidth) + self.xMin + self.cellWidth/2
 		y = (col * self.cellHeight) + self.yMin + self.cellHeight/2

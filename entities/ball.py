@@ -40,6 +40,9 @@ class Ball(Entity):
 		self.sampleCompensate = 100
 
 	def setRadius(self, radius):
+		"""
+		Important to redefine bounding box.
+		"""
 		self.radius = radius
 		self.top = radius
 		self.bottom = -radius

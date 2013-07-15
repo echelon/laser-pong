@@ -21,14 +21,14 @@ from lib.shape import Shape
 
 # PONG CODES
 #from controller import setup_controls
-#from controller import *
+from controller import *
 from configs import *
 from surface import *
 
 # Entities
-from box import *
-from ball import *
-from paddle import *
+from entities.box import *
+from entities.ball import *
+from entities.paddle import *
 
 ps = PointStream()
 ps.showBlanking = False
@@ -40,15 +40,16 @@ surf = Surface(X_MAX, X_MIN, Y_MAX, Y_MIN)
 
 # OBJECTS 
 
-paddle1 = Paddle()
-paddle2 = Paddle()
+paddles = []
+paddles.append(Paddle())
+paddles.append(Paddle())
 ball = Ball()
 box = Box()
 
 box.width = surf.width
 box.height = surf.height
-paddle1.x = -10000
-paddle2.x = 10000
+paddles[0].x = -20000
+paddles[1].x = 20000
 
 grid = []
 grid.append(Box())
@@ -60,8 +61,8 @@ grid[0].vertSamplePts = 10
 ball.setRadius(1000)
 ball.setPos(surf.getCenter())
 
-ps.objects.append(paddle1)
-ps.objects.append(paddle2)
+ps.objects.append(paddles[0])
+ps.objects.append(paddles[1])
 ps.objects.append(ball)
 ps.objects.append(box)
 ps.objects.append(grid[0])
@@ -128,7 +129,7 @@ def game_thread():
 		grid[0].x = coord[0]
 		grid[0].y = coord[1]
 
-		print "cell", cell
+		#print "cell", cell
 
 		ball.y = y
 		ball.yVel = yVel
@@ -138,8 +139,38 @@ def game_thread():
 		time.sleep(0.02) # Keep this thread from hogging CPU
 
 def controller_thread():
+	pygame.joystick.init()
+	pygame.display.init()
+
+	# Wait until we have a joystick
+	# TODO: Doesn't account for unplugged. 
+	while not pygame.joystick.get_count():
+		print "No Joystick detected!"
+		time.sleep(5)
+
+	controls = []
+	controls.append(init_controls(0))
+	controls.append(init_controls(1))
+
 	while True:
-		time.sleep(0.2) # Keep this thread from hogging CPU
+		e = pygame.event.get()
+
+		lVert, lHori, rVert, rHori = (0, 0, 0, 0)
+
+		for i in range(len(paddles)):
+			paddle = paddles[i]
+			control = controls[i]
+			lVert = control.getLeftVert()
+			rVert = control.getRightVert()
+
+			vert = lVert or rVert
+
+			print vert
+			paddle.y += vert*3000
+
+
+		time.sleep(0.02) # Keep this thread from hogging CPU
+
 
 thread.start_new_thread(dac_thread, ())
 thread.start_new_thread(game_thread, ())

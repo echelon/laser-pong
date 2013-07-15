@@ -22,8 +22,35 @@ class Paddle(Entity):
 		self.width = 1000
 		self.height = 7000
 
+		w = self.width/2
+		h = self.height/2
+
+		# Bounding box calculation
+		# Bottom should be negative of relative (0, 0) coord!
+		self.top = h
+		self.bottom = -h
+		self.left = w
+		self.right = -w
+
 		self.edgeSamplePts = 10
 		self.vertSamplePts = 10
+
+	def setSize(self, width, height):
+		"""
+		Important to redefine bounding box.
+		"""
+		self.width = width
+		self.height = height
+
+		w = self.width/2
+		h = self.height/2
+
+		# Bounding box calculation
+		# Bottom should be negative of relative (0, 0) coord!
+		self.top = h
+		self.bottom = -h
+		self.left = w
+		self.right = -w
 
 	def produce(self):
 		"""
