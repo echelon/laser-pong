@@ -30,6 +30,10 @@ from entities.box import *
 from entities.ball import *
 from entities.paddle import *
 
+############################
+#  OBJECT AND GAME SETUP
+############################
+
 ps = PointStream()
 ps.showBlanking = False
 ps.showTracking = False
@@ -38,25 +42,33 @@ ps.blankingSamplePts = 15
 
 surf = Surface(X_MAX, X_MIN, Y_MAX, Y_MIN)
 
-# OBJECTS 
-
 paddles = []
-paddles.append(Paddle())
-paddles.append(Paddle())
+for i in range(2):
+	paddle = Paddle()
+	paddles.append(paddle)
+	w = surf.width * 1/64.0
+	h = surf.height * 1/5.0
+	paddle.setSize(w, h)
+
+paddles[0].x = surf.xMax - paddles[0].width*2
+paddles[1].x = surf.xMin + paddles[0].width*2
+
+#paddles.append(Paddle())
+#paddles.append(Paddle())
 ball = Ball()
 box = Box()
 
 box.width = surf.width
 box.height = surf.height
-paddles[0].x = -20000
-paddles[1].x = 20000
 
+"""
 grid = []
 grid.append(Box())
 grid[0].width = surf.cellWidth
 grid[0].height = surf.cellHeight
 grid[0].edgeSamplePts = 20
 grid[0].vertSamplePts = 10
+"""
 
 ball.setRadius(1000)
 ball.setPos(surf.getCenter())
@@ -65,7 +77,7 @@ ps.objects.append(paddles[0])
 ps.objects.append(paddles[1])
 ps.objects.append(ball)
 ps.objects.append(box)
-ps.objects.append(grid[0])
+#ps.objects.append(grid[0])
 
 surf.inCell(12000, 10000)
 
@@ -89,7 +101,8 @@ def dac_thread():
 def game_thread():
 	global ball
 	global surf
-	global grid
+	#global grid
+
 
 	VEL_MIN = 500
 	VEL_MAX = 1200
@@ -123,11 +136,14 @@ def game_thread():
 			xVel = random.randint(VEL_MIN, VEL_MAX)
 
 
+		for paddle in paddles:
+			pass
+
 		#print x, y, "grid",  surf.inCell(x, y)
-		coord = surf.getGridCenter(surf.inCell(x, y))
-		cell = surf.inCell(x, y)
-		grid[0].x = coord[0]
-		grid[0].y = coord[1]
+		#coord = surf.getGridCenter(surf.inCell(x, y))
+		#cell = surf.inCell(x, y)
+		#grid[0].x = coord[0]
+		#grid[0].y = coord[1]
 
 		#print "cell", cell
 
@@ -158,15 +174,23 @@ def controller_thread():
 		lVert, lHori, rVert, rHori = (0, 0, 0, 0)
 
 		for i in range(len(paddles)):
+
 			paddle = paddles[i]
 			control = controls[i]
 			lVert = control.getLeftVert()
 			rVert = control.getRightVert()
 
 			vert = lVert or rVert
+			y = paddle.y
 
-			print vert
-			paddle.y += vert*3000
+			y += vert * 3000
+
+			if surf.isAbove(y, paddle):
+				y = surf.topMost(paddle)
+			elif surf.isBelow(y, paddle):
+				y = surf.bottomMost(paddle)
+
+			paddle.y = y
 
 
 		time.sleep(0.02) # Keep this thread from hogging CPU
