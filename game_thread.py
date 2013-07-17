@@ -2,10 +2,8 @@
 import math
 import random
 import itertools
-import sys
-import thread
-import time
 from datetime import datetime, timedelta
+import time # for sleep
 
 # PONG CODES
 from collision import *
@@ -23,6 +21,10 @@ def game_thread(surface, ball, paddles):
 
 	paddleLastCollided = -1
 
+	isRestarting = True
+	lastOut = datetime.now()
+	outWait = timedelta(milliseconds=500)
+
 	while True:
 		x = ball.x
 		y = ball.y
@@ -33,10 +35,19 @@ def game_thread(surface, ball, paddles):
 		xVelSign = 1 if ball.xVel >= 0 else -1
 		yVelSign = 1 if ball.yVel >= 0 else -1
 
-		hitPaddle = False
+		if isRestarting:
+			if datetime.now() < lastOut + outWait:
+				time.sleep(0.02) # Keep this thread from hogging CPU
+				continue
+			else:
+				xVel = random.randint(VEL_MIN, VEL_MAX)
+				yVel = random.randint(VEL_MIN, VEL_MAX)
+				isRestarting = False
 
 		x += xVel
 		y += yVel
+
+		hitPaddle = False
 
 		for i in range(len(paddles)):
 			paddle = paddles[i]
@@ -61,13 +72,13 @@ def game_thread(surface, ball, paddles):
 
 			if surface.isLeft(x, ball):
 				x, y = (0, 0)
-				xVel = random.randint(VEL_MIN, VEL_MAX) * -1
-				yVel = random.randint(VEL_MIN, VEL_MAX) * -1
+				lastOut = datetime.now()
+				isRestarting = True
 
 			elif surface.isRight(x, ball):
 				x, y = (0, 0)
-				xVel = random.randint(VEL_MIN, VEL_MAX)
-				yVel = random.randint(VEL_MIN, VEL_MAX)
+				lastOut = datetime.now()
+				isRestarting = True
 
 		ball.x = x
 		ball.y = y
