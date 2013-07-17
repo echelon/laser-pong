@@ -27,6 +27,7 @@ from surface import *
 
 # Entities
 from entities.box import *
+from entities.quad import *
 from entities.ball import *
 from entities.paddle import *
 
@@ -35,6 +36,8 @@ from entities.paddle import *
 ############################
 
 ps = PointStream()
+ps.flipX = FLIP_X
+ps.flipY = FLIP_Y
 ps.showBlanking = False
 ps.showTracking = False
 ps.trackingSamplePts = 15
@@ -56,10 +59,14 @@ paddles[1].x = surf.xMin + paddles[0].width*2
 #paddles.append(Paddle())
 #paddles.append(Paddle())
 ball = Ball()
-box = Box()
+box = Quad()
 
-box.width = surf.width
-box.height = surf.height
+box.setSize(surf.width, surf.height)
+box.edgeSamplePts = 40
+box.vertSamplePts = 10
+box.r = CMAX
+box.g = CMAX
+box.b = CMAX
 
 """
 grid = []

@@ -1,8 +1,9 @@
 from lib.shape import *
+from lib.common import *
 
 class Entity(Shape):
 
-	def __init__(self, x = 0, y = 0, r = 0, g = 0, b = 0):
+	def __init__(self, x=0, y=0, r=CMAX, g=CMAX, b=CMAX):
 
 		super(Entity, self).__init__(x, y, r, g, b)
 
@@ -17,6 +18,22 @@ class Entity(Shape):
 		self.right = 0
 
 		self.collisionRadius = 0
+
+	def _recalcBoundBox(self):
+		"""
+		Call whenever size is reset to maintain an accurate
+		bounding box. Note: Width and height are around a
+		center coordinate: (x,y) = (0,0)
+		"""
+		w = self.width/2
+		h = self.height/2
+
+		# Bounding box calculation
+		# Bottom should be negative of relative (0, 0) coord!
+		self.top = h
+		self.bottom = -h
+		self.left = w
+		self.right = -w
 
 	def setX(self, x):
 		self.x = x
@@ -33,11 +50,11 @@ class Entity(Shape):
 		self.x = x
 		self.y = y
 
-	def checkCollide(self, other):
-		"""
-		Determine if two objects collide.
-		"""
-		rad = other.collisionRadius + self.collisionRadius
-		hyp = math.sqrt((other.x - self.x)**2 + (other.y - self.y)**2)
-		return (hyp < rad)
+	#def checkCollide(self, other):
+	#	"""
+	#	Determine if two objects collide.
+	#	"""
+	#	rad = other.collisionRadius + self.collisionRadius
+	#	hyp = math.sqrt((other.x - self.x)**2 + (other.y - self.y)**2)
+	#	return (hyp < rad)
 

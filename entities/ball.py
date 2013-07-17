@@ -12,7 +12,7 @@ from entity import *
 
 class Ball(Entity):
 
-	def __init__(self, x = 0, y = 0, r = 0, g = 0, b = 0, radius = 8200):
+	def __init__(self, x=0, y=0, r=CMAX, g=CMAX, b=CMAX, radius=8200):
 
 		super(Ball, self).__init__(x, y, r, g, b)
 
@@ -23,31 +23,33 @@ class Ball(Entity):
 		self.x = x
 		self.y = y
 
-		self.r = CMAX
-		self.g = CMAX
-		self.b = CMAX
+		self.r = r
+		self.g = g
+		self.b = b
 
 		self.radius = radius
 
-		# Bounding box calculation
-		# Bottom should be negative of relative (0, 0) coord!
-		self.top = radius
-		self.bottom = -radius
-		self.left = radius
-		self.right = -radius
+		self._recalcBoundBox()
 
 		self.samplePts = 100
 		self.sampleCompensate = 100
 
 	def setRadius(self, radius):
-		"""
-		Important to redefine bounding box.
-		"""
 		self.radius = radius
-		self.top = radius
-		self.bottom = -radius
-		self.left = radius
-		self.right = -radius
+		self._recalcBoundBox()
+
+	def _recalcBoundBox(self):
+		"""
+		Call whenever size is reset to maintain an accurate
+		bounding box. Note: Width and height are around a
+		center coordinate: (x,y) = (0,0)
+		"""
+		# Bounding box calculation
+		# Bottom should be negative of relative (0, 0) coord!
+		self.top = self.radius
+		self.bottom = -self.radius
+		self.left = self.radius # TODO/FIXME: Correct?
+		self.right = -self.radius # TODO/FIXME: Correct?
 
 	def produce(self):
 		"""

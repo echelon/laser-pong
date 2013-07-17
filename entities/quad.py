@@ -2,28 +2,42 @@ from lib.common import *
 from lib.shape import *
 from entity import *
 
-class Box(Shape):
+class Quad(Entity):
 
-	def __init__(self, x = 0, y = 0, r = 0, g = 0, b = 0):
+	def __init__(self, x=0, y=0, r=CMAX, g=CMAX, b=CMAX,
+					width=1000, height=2000):
 
-		super(Box, self).__init__(x, y, r, g, b)
+		super(Quad, self).__init__(x, y, r, g, b)
+
+		self.x = x
+		self.y = y
+
+		self.r = r
+		self.g = g
+		self.b = b
+
+		self.width = width
+		self.height = height
+
+		# Bounding box
+		self.top = 0
+		self.bottom = 0
+		self.left = 0
+		self.right = 0
+
+		self._recalcBoundBox()
+
+		self.edgeSamplePts = 10
+		self.vertSamplePts = 10
 
 		self.drawn = False
 		self.pauseFirst = True
 		self.pauseLast = True
 
-		self.x = x
-		self.y = y
-
-		self.r = CMAX
-		self.g = CMAX
-		self.b = CMAX
-
-		self.width = 100
-		self.height = 100
-
-		self.edgeSamplePts = 40
-		self.vertSamplePts = 10
+	def setSize(self, width, height):
+		self.width = width
+		self.height = height
+		self._recalcBoundBox()
 
 	def produce(self):
 		"""
@@ -40,14 +54,19 @@ class Box(Shape):
 		pts.append({'x': -w, 'y': -h})
 		pts.append({'x': -w, 'y': h})
 
+		# Translate points
+		for pt in pts:
+			pt['x'] += self.x
+			pt['y'] += self.y
+
 		def make_line(pt1, pt2, steps=200):
 			xdiff = pt1['x'] - pt2['x']
 			ydiff = pt1['y'] - pt2['y']
 			line = []
 			for i in xrange(0, steps, 1):
 				j = float(i)/steps
-				x = pt1['x'] - (xdiff * j) + self.x
-				y = pt1['y'] - (ydiff * j) + self.y
+				x = pt1['x'] - (xdiff * j)
+				y = pt1['y'] - (ydiff * j)
 				line.append((x, y, r, g, b))
 			return line
 
