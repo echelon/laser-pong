@@ -35,6 +35,8 @@ class Surface(object):
 		self.yMax = maxY
 		self.yMin = minY
 
+		print self.xMax, self.xMin, self.yMax, self.yMin
+
 		self.width = abs(maxX - minX)
 		self.height = abs(maxY - minY)
 
@@ -76,6 +78,8 @@ class Surface(object):
 
 		return (x, y)
 
+	def getArea(self):
+		return self.width * self.height
 
 	def getCenter(self):
 		return self.center

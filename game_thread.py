@@ -11,19 +11,25 @@ from configs import *
 from surface import *
 
 def game_thread(surface, ball, paddles):
+	"""
+	This function is run as a thread and defines the game logic.
+	"""
 
-	VEL_MIN = 100
-	VEL_MAX = 500
-	VEL_INC = 50
+	# Keep this thread from hogging CPU
+	THREAD_SLEEP_TIME = 0.02
 
-	ball.xVel = random.randint(VEL_MIN, VEL_MAX)
-	ball.yVel = random.randint(VEL_MIN, VEL_MAX)
+	VEL_MIN = surface.getArea() / 500000
+	VEL_INC = VEL_MIN / 10
+
+	ball.xVel = VEL_MIN
+	ball.yVel = VEL_MIN
 
 	paddleLastCollided = -1
 
 	isRestarting = True
 	lastOut = datetime.now()
-	outWait = timedelta(milliseconds=500)
+	outWait1 = timedelta(milliseconds=300)
+	outWait2 = timedelta(milliseconds=1000)
 
 	while True:
 		x = ball.x
@@ -36,12 +42,20 @@ def game_thread(surface, ball, paddles):
 		yVelSign = 1 if ball.yVel >= 0 else -1
 
 		if isRestarting:
-			if datetime.now() < lastOut + outWait:
-				time.sleep(0.02) # Keep this thread from hogging CPU
+			if datetime.now() < lastOut + outWait1:
+				ball.skipDraw = True
+				time.sleep(THREAD_SLEEP_TIME)
+				continue
+			if datetime.now() < lastOut + outWait2:
+				ball.x = 0
+				ball.y = 0
+				ball.skipDraw = False
+				time.sleep(THREAD_SLEEP_TIME)
 				continue
 			else:
-				xVel = random.randint(VEL_MIN, VEL_MAX)
-				yVel = random.randint(VEL_MIN, VEL_MAX)
+				xVel = VEL_MIN * (1 if random.randint(0, 1) else -1)
+				yVel = VEL_MIN * (1 if random.randint(0, 1) else -1)
+				paddleLastCollided = -1
 				isRestarting = False
 
 		x += xVel
@@ -70,13 +84,7 @@ def game_thread(surface, ball, paddles):
 				y = surface.bottomMost(ball)
 				yVel *= -1
 
-			if surface.isLeft(x, ball):
-				x, y = (0, 0)
-				lastOut = datetime.now()
-				isRestarting = True
-
-			elif surface.isRight(x, ball):
-				x, y = (0, 0)
+			if surface.isLeft(x, ball) or surface.isRight(x, ball):
 				lastOut = datetime.now()
 				isRestarting = True
 
@@ -85,5 +93,5 @@ def game_thread(surface, ball, paddles):
 		ball.xVel = xVel
 		ball.yVel = yVel
 
-		time.sleep(0.02) # Keep this thread from hogging CPU
+		time.sleep(THREAD_SLEEP_TIME)
 
