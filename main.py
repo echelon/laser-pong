@@ -21,12 +21,14 @@ from lib.shape import Shape
 
 # PONG CODES
 #from controller import setup_controls
+from game_thread import *
 from controller import *
 from configs import *
 from surface import *
 
 # Entities
 from entities.box import *
+from entities.wall import *
 from entities.quad import *
 from entities.ball import *
 from entities.paddle import *
@@ -56,6 +58,14 @@ for i in range(2):
 paddles[0].x = surf.xMax - paddles[0].width*2
 paddles[1].x = surf.xMin + paddles[0].width*2
 
+walls = []
+for i in range(2):
+	wall = Wall(length=surf.width)
+	walls.append(wall)
+
+walls[0].y = surf.yMax
+walls[1].y = surf.yMin
+
 #paddles.append(Paddle())
 #paddles.append(Paddle())
 ball = Ball()
@@ -82,8 +92,10 @@ ball.setPos(surf.getCenter())
 
 ps.objects.append(paddles[0])
 ps.objects.append(paddles[1])
+ps.objects.append(walls[0])
+ps.objects.append(walls[1])
 ps.objects.append(ball)
-ps.objects.append(box)
+#ps.objects.append(box)
 #ps.objects.append(grid[0])
 
 surf.inCell(12000, 10000)
@@ -104,62 +116,6 @@ def dac_thread():
 			traceback.print_tb(sys.exc_info()[2])
 			print "\n"
 			pass
-
-def game_thread():
-	global ball
-	global surf
-	#global grid
-
-
-	VEL_MIN = 500
-	VEL_MAX = 1200
-
-	ball.xVel = random.randint(VEL_MIN, VEL_MAX)
-	ball.yVel = random.randint(VEL_MIN, VEL_MAX)
-
-	while True:
-		y = ball.y
-		yVel = ball.yVel
-		x = ball.x
-		xVel = ball.xVel
-
-		y += yVel
-		x += xVel
-
-		if surf.isAbove(y, ball):
-			y = surf.topMost(ball)
-			yVel = random.randint(VEL_MIN, VEL_MAX) * -1
-
-		elif surf.isBelow(y, ball):
-			y = surf.bottomMost(ball)
-			yVel = random.randint(VEL_MIN, VEL_MAX)
-
-		if surf.isLeft(x, ball):
-			x = surf.leftMost(ball)
-			xVel = random.randint(VEL_MIN, VEL_MAX) * -1
-
-		elif surf.isRight(x, ball):
-			x = surf.rightMost(ball)
-			xVel = random.randint(VEL_MIN, VEL_MAX)
-
-
-		for paddle in paddles:
-			pass
-
-		#print x, y, "grid",  surf.inCell(x, y)
-		#coord = surf.getGridCenter(surf.inCell(x, y))
-		#cell = surf.inCell(x, y)
-		#grid[0].x = coord[0]
-		#grid[0].y = coord[1]
-
-		#print "cell", cell
-
-		ball.y = y
-		ball.yVel = yVel
-		ball.x = x
-		ball.xVel = xVel
-
-		time.sleep(0.02) # Keep this thread from hogging CPU
 
 def controller_thread():
 	pygame.joystick.init()
@@ -204,7 +160,7 @@ def controller_thread():
 
 
 thread.start_new_thread(dac_thread, ())
-thread.start_new_thread(game_thread, ())
+thread.start_new_thread(game_thread, (surf, ball, paddles))
 thread.start_new_thread(controller_thread, ())
 
 """

@@ -5,7 +5,7 @@ import sys
 # TODO: Code won't work yet.
 # TODO: Code cleanup
 
-def collide(circle, rectangle):
+def is_collision(circle, rectangle):
 	"""
 	Elegant circle/rectangle intersection algorithm
 	http://stackoverflow.com/a/1879223
@@ -17,8 +17,8 @@ def collide(circle, rectangle):
 			return maxVal
 		return val
 
-	closestX = clamp(circle.x, paddle.x - padde.width/2, paddle.x + paddle.width/2)
-	closestY = clamp(circle.y, paddle.y - padde.height/2, paddle.y + paddle.height/2)
+	closestX = clamp(circle.x, rectangle.getAbsRight(), rectangle.getAbsLeft())
+	closestY = clamp(circle.y, rectangle.getAbsBottom(), rectangle.getAbsTop())
 
 	distX = circle.x - closestX
 	distY = circle.y - closestY

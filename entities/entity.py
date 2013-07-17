@@ -35,6 +35,18 @@ class Entity(Shape):
 		self.left = w
 		self.right = -w
 
+	def getAbsLeft(self):
+		return self.x + self.left
+
+	def getAbsRight(self):
+		return self.x + self.right
+
+	def getAbsTop(self):
+		return self.y + self.top
+
+	def getAbsBottom(self):
+		return self.y + self.bottom
+
 	def setX(self, x):
 		self.x = x
 

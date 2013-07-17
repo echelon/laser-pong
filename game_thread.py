@@ -16,7 +16,7 @@ def game_thread(surface, ball, paddles):
 
 	VEL_MIN = 100
 	VEL_MAX = 500
-	VEL_INC = 250
+	VEL_INC = 50
 
 	ball.xVel = random.randint(VEL_MIN, VEL_MAX)
 	ball.yVel = random.randint(VEL_MIN, VEL_MAX)
@@ -24,53 +24,55 @@ def game_thread(surface, ball, paddles):
 	paddleLastCollided = -1
 
 	while True:
-		y = ball.y
-		yVel = ball.yVel
 		x = ball.x
+		y = ball.y
 		xVel = ball.xVel
+		yVel = ball.yVel
+		xVelMag = abs(ball.xVel)
+		yVelMag = abs(ball.yVel)
+		xVelSign = 1 if ball.xVel >= 0 else -1
+		yVelSign = 1 if ball.yVel >= 0 else -1
 
-		y += yVel
+		hitPaddle = False
+
 		x += xVel
-
-		if surface.isAbove(y, ball):
-			y = surface.topMost(ball)
-			yVel *= -1
-
-		elif surface.isBelow(y, ball):
-			y = surface.bottomMost(ball)
-			yVel *= -1
-
-		if surface.isLeft(x, ball):
-			x, y = (0, 0)
-			xVel = random.randint(VEL_MIN, VEL_MAX) * -1
-			yVel = random.randint(VEL_MIN, VEL_MAX) * -1
-
-		elif surface.isRight(x, ball):
-			x, y = (0, 0)
-			xVel = random.randint(VEL_MIN, VEL_MAX)
-			yVel = random.randint(VEL_MIN, VEL_MAX)
+		y += yVel
 
 		for i in range(len(paddles)):
 			paddle = paddles[i]
 			if is_collision(ball, paddle) and paddleLastCollided != i:
 				paddleLastCollided = i
-				xVel *= -1
-				xVel += VEL_INC
-				yVel += VEL_INC
-				print "Collide"
+				xVelMag += VEL_INC
+				yVelMag += VEL_INC
+				xVel = xVelMag * xVelSign * -1
+				x = paddle.x
 
-		#print x, y, "grid",  surface.inCell(x, y)
-		#coord = surface.getGridCenter(surface.inCell(x, y))
-		#cell = surface.inCell(x, y)
-		#grid[0].x = coord[0]
-		#grid[0].y = coord[1]
+				hitPaddle = True
+				break
 
-		#print "cell", cell
+		if not hitPaddle:
+			if surface.isAbove(y, ball):
+				y = surface.topMost(ball)
+				yVel *= -1
 
-		ball.y = y
-		ball.yVel = yVel
+			elif surface.isBelow(y, ball):
+				y = surface.bottomMost(ball)
+				yVel *= -1
+
+			if surface.isLeft(x, ball):
+				x, y = (0, 0)
+				xVel = random.randint(VEL_MIN, VEL_MAX) * -1
+				yVel = random.randint(VEL_MIN, VEL_MAX) * -1
+
+			elif surface.isRight(x, ball):
+				x, y = (0, 0)
+				xVel = random.randint(VEL_MIN, VEL_MAX)
+				yVel = random.randint(VEL_MIN, VEL_MAX)
+
 		ball.x = x
+		ball.y = y
 		ball.xVel = xVel
+		ball.yVel = yVel
 
 		time.sleep(0.02) # Keep this thread from hogging CPU
 
