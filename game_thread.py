@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import time # for sleep
 
 # PONG CODES
+from configs import *
 from collision import *
 from configs import *
 from surface import *
@@ -18,8 +19,8 @@ def game_thread(surface, ball, paddles):
 	# Keep this thread from hogging CPU
 	THREAD_SLEEP_TIME = 0.02
 
-	VEL_MIN = surface.getArea() / 500000
-	VEL_INC = VEL_MIN / 10
+	VEL_MIN = (math.sqrt(surface.getArea()) / 50) * BALL_VEL_INIT_MULT
+	VEL_INC = (VEL_MIN / 10) * BALL_VEL_INC_MULT
 
 	ball.xVel = VEL_MIN
 	ball.yVel = VEL_MIN

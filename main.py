@@ -46,7 +46,7 @@ ps.trackingSamplePts = 15
 ps.blankingSamplePts = 15
 
 surf = Surface(X_MAX, X_MIN, Y_MAX, Y_MIN)
-ballRadius = surf.getArea() / 200000
+ballRadius = math.sqrt(surf.getArea()) / 20
 
 paddles = []
 for i in range(2):
@@ -70,6 +70,9 @@ walls[1].y = surf.yMin
 ball = Ball()
 ball.setRadius(ballRadius)
 ball.setPos(surf.getCenter())
+ball.r = 0
+ball.g = CMAX
+ball.b = 0
 
 box = Quad()
 box.setSize(surf.width, surf.height)
@@ -91,7 +94,7 @@ def controller_thread():
 	pygame.joystick.init()
 	pygame.display.init()
 
-	PADDLE_VEL = surf.getArea() / 200000
+	PADDLE_VEL = (math.sqrt(surf.getArea()) / 10) * PADDLE_VEL_MULT
 
 	# Wait until we have a joystick
 	# TODO: Doesn't account for unplugged. 

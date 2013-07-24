@@ -27,8 +27,8 @@ class Quad(Entity):
 
 		self._recalcBoundBox()
 
-		self.edgeSamplePts = 10
-		self.vertSamplePts = 10
+		self.edgeSamplePts = 30
+		self.vertSamplePts = 20
 
 		self.drawn = False
 		self.pauseFirst = True

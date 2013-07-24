@@ -2,11 +2,28 @@
 Configs, params, and so forth.
 """
 
-# Max dimension magnitude ~= 32000
-X_MAX = 6000
-X_MIN = -6000
-Y_MAX = 3000
-Y_MIN = -1000 #-3000 # XXX FIXME TODO: Something wrong with y-coords!
+DMAX = 30000
+
+		# ===========================
+		# BASIC SURFACE CONFIGURATION
+		# ===========================
+
+Y_MAX = DMAX /10
+Y_MIN = -DMAX /10
+X_MAX = DMAX /10
+X_MIN = -DMAX /10
+
+		# ==========================
+		# 	VELOCITY MULTIPLIERS
+		# ==========================
+
+PADDLE_VEL_MULT = 1.0
+BALL_VEL_INIT_MULT = 1.0
+BALL_VEL_INC_MULT = 1.0
+
+		# ==========================
+		# MORE SURFACE CONFIGURATION
+		# ==========================
 
 # Surface flip
 FLIP_X = True
