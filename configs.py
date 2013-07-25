@@ -8,11 +8,14 @@ DMAX = 30000
 		# BASIC SURFACE CONFIGURATION
 		# ===========================
 
-Y_MAX = DMAX /5
-Y_MIN = -DMAX /5 
+x_offset = -10000
+y_offset = -10000
 
-X_MAX = DMAX / 2
-X_MIN = -DMAX / 2
+Y_MAX = DMAX /5 + y_offset
+Y_MIN = -DMAX /5 + y_offset
+
+X_MAX = DMAX / 5 + x_offset
+X_MIN = -DMAX / 5 + x_offset
 
 		# ==========================
 		# 	VELOCITY MULTIPLIERS
@@ -39,4 +42,4 @@ FLIP_Y = False
 # Draw walls? 
 # Not necessary for interesting surfaces. (ie, billboards)
 DRAW_WALLS = True
-
+DRAW_SURFACE_BOX = True

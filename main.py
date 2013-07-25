@@ -91,6 +91,9 @@ if DRAW_WALLS:
 	ps.objects.append(walls[0])
 	ps.objects.append(walls[1])
 
+if DRAW_SURFACE_BOX:
+	ps.objects.append(box)
+
 def dac_thread():
 	global ps
 

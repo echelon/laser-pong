@@ -1,31 +1,5 @@
 import math
 
-"""
-Divide the play area defined in configs.py into a grid system.
-There will either be a 4x4, 2x4, or 4x2 grid constructed.
-
-	Coordinate System:
-
-		0	1	2	3
-		4	5	6	7
-		8	9	10	11
-		12	13	14	15
-
-	Or, similarly:
-
-		0	1
-		2	3
-		4	5
-		6	7
-
-	Or,
-
-		0	1	2	3
-		4	5	6	7
-
-
-"""
-
 class Surface(object):
 
 	def __init__(self, maxX, minX, maxY, minY):
@@ -52,31 +26,6 @@ class Surface(object):
 		self.cols = 0
 		self.cellWidth = 0 # width/cols
 		self.cellHeight = 0 # height/rows
-
-		self.setGrid(4, 4)
-
-		if self.ratioFloat < 0.75:
-			self.setGrid(rows=4, cols=2)
-
-		elif self.ratioFloat > 1.25:
-			self.setGrid(rows=2, cols=4)
-
-	def setGrid(self, rows, cols):
-		self.rows = rows
-		self.cols = cols
-		self.cellWidth = self.width / self.cols
-		self.cellHeight = self.height / self.rows
-
-	def getGridCenter(self, gridNum):
-		row = gridNum / self.rows
-		col = gridNum % self.cols
-
-		#print gridNum, row, col
-
-		x = (row * self.cellWidth) + self.xMin + self.cellWidth/2
-		y = (col * self.cellHeight) + self.yMin + self.cellHeight/2
-
-		return (x, y)
 
 	def getArea(self):
 		return self.width * self.height
