@@ -52,6 +52,10 @@ class PointStream(object):
 		self.trackingSamplePts = TRACKING_SAMPLE_PTS
 		self.blankingSamplePts = BLANKING_SAMPLE_PTS
 
+	def setCenter(self, x, y):
+		self.translateX = x
+		self.translateY = y
+
 	def transform(self, point):
 		"""
 		Returns global SRT transformations on points.

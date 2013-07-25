@@ -54,3 +54,18 @@ class Shape(object):
 		self.g = g
 		self.b = b
 
+	def setX(self, x):
+		self.x = x
+
+	def setY(self, y):
+		self.y = y
+
+	def setPos(self, x, y=0):
+		if type(x) == dict and 'x' in x:
+			self.x = x['x']
+			self.y = x['y']
+			return
+
+		self.x = x
+		self.y = y
+

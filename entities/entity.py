@@ -47,21 +47,6 @@ class Entity(Shape):
 	def getAbsBottom(self):
 		return self.y + self.bottom
 
-	def setX(self, x):
-		self.x = x
-
-	def setY(self, y):
-		self.y = y
-
-	def setPos(self, x, y=0):
-		if type(x) == dict and 'x' in x:
-			self.x = x['x']
-			self.y = x['y']
-			return
-
-		self.x = x
-		self.y = y
-
 	#def checkCollide(self, other):
 	#	"""
 	#	Determine if two objects collide.

@@ -1,90 +1,76 @@
-import math
 
 class Surface(object):
+	"""
+	Input the raw, physical edges and generate a virtual playfield.
+	The virtual field has a width, height, top, bottom, left, and right
+	centered about (0, 0).
+
+	PointStream handles the playfield translation about Surface.absCenter.
+	"""
 
 	def __init__(self, maxX, minX, maxY, minY):
 
-		self.xMax = maxX
-		self.xMin = minX
-		self.yMax = maxY
-		self.yMin = minY
+		# XXX: Do not use these raw coordinates for math!
+		# PointStream will be offset by Surface's `self.center` as a global 
+		# correction. All objects use local (0, 0) map coordinates!
+		self._xMax = maxX
+		self._xMin = minX
+		self._yMax = maxY
+		self._yMin = minY
 
-		print 'dimensions', self.xMax, self.xMin, self.yMax, self.yMin
-
-		self.width = abs(maxX - minX)
-		self.height = abs(maxY - minY)
-
-		self.center = {
+		# XXX: This is a physical center!
+		# Everything below this assumes (0, 0).
+		self.absCenter = {
 			'x': (maxX + minX)/2,
 			'y': (maxY + minY)/2,
 		}
 
-		print 'center', self.center
+		self.width = abs(maxX - minX)
+		self.height = abs(maxY - minY)
 
-		self.ratioFloat = self.width / (self.height*1.0)
-		self.ratio = int(round(self.ratioFloat))
+		hh, hw = (self.height/2, self.width/2)
 
-		self.rows = 0
-		self.cols = 0
-		self.cellWidth = 0 # width/cols
-		self.cellHeight = 0 # height/rows
+		self.top = hh
+		self.bottom = -hh
+		self.left = -hw
+		self.right = hw
 
 	def getArea(self):
 		return self.width * self.height
 
-	def getCenter(self):
-		return self.center
-
-	def inCell(self, x, y=None):
-		if type(x) == dict and 'x' in x:
-			x = x['x']
-			y = x['y']
-
-		if x < self.xMin or x > self.xMax or \
-			y < self.yMin or y > self.yMax:
-				return -1
-
-		col = (x - self.xMin) / (self.width*1.0) * self.cols
-		row = (y - self.yMin) / (self.height*1.0) * self.rows
-
-		col = int(math.floor(col))
-		row = int(math.floor(row))
-
-		cell = (row * self.cols) + col
-
-		return cell
+	def getAbsCenter(self):
+		return self.absCenter
 
 	#
 	# See if an object is outside of the bounding box
 	#
 
 	def isAbove(self, y, obj):
-		return y + obj.top > self.yMax
+		return y + obj.top > self.top
 
 	def isBelow(self, y, obj):
-		return y + obj.bottom < self.yMin
+		return y + obj.bottom < self.bottom
 
 	def isLeft(self, x, obj):
-		return x + obj.left > self.xMax
+		return x + obj.left < self.left
 
 	def isRight(self, x, obj):
-		return x + obj.right < self.xMin
-
+		return x + obj.right > self.right
 
 	#
 	# Calculate the extremest coordinate that an object can be.
 	#
 
 	def topMost(self, obj):
-		return self.yMax - obj.top
+		return self.top - obj.top
 
 	def bottomMost(self, obj):
-		return self.yMin - obj.bottom
+		return self.bottom - obj.bottom
 
 	def leftMost(self, obj):
-		return self.xMax - obj.left
+		return self.left - obj.left
 
 	def rightMost(self, obj):
-		return self.xMin - obj.right
+		return self.right - obj.right
 
 

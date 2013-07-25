@@ -1,3 +1,7 @@
+"""
+Most of the game logic is here, aside from controller/paddle movement.
+"""
+
 # STDLIB
 import math
 import random
@@ -44,12 +48,14 @@ def game_thread(surface, ball, paddles):
 
 		if isRestarting:
 			if datetime.now() < lastOut + outWait1:
-				ball.skipDraw = True
 				ball.x = 0
 				ball.y = 0
+				ball.skipDraw = True
 				time.sleep(THREAD_SLEEP_TIME)
 				continue
 			if datetime.now() < lastOut + outWait2:
+				ball.x = 0
+				ball.y = 0
 				ball.skipDraw = False
 				time.sleep(THREAD_SLEEP_TIME)
 				continue
@@ -86,6 +92,7 @@ def game_thread(surface, ball, paddles):
 				yVel *= -1
 
 			if surface.isLeft(x, ball) or surface.isRight(x, ball):
+				print 'OUT!', 'cur->new', ball.x, x
 				lastOut = datetime.now()
 				isRestarting = True
 
