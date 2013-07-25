@@ -49,3 +49,8 @@ class Shape(object):
 			self.firstPt = x
 			break
 
+	def setColor(self, r, g, b):
+		self.r = r
+		self.g = g
+		self.b = b
+

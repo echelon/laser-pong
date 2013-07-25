@@ -60,14 +60,6 @@ for i in range(2):
 paddles[0].x = surf.xMax - paddles[0].width*2 - ballRadius
 paddles[1].x = surf.xMin + paddles[0].width*2 + ballRadius
 
-walls = []
-for i in range(2):
-	wall = Wall(length=surf.width)
-	walls.append(wall)
-
-walls[0].y = surf.yMax
-walls[1].y = surf.yMin
-
 ball = Ball()
 ball.setRadius(ballRadius)
 ball.setPos(surf.getCenter())
@@ -75,23 +67,31 @@ ball.r = 0
 ball.g = CMAX
 ball.b = 0
 
-box = Quad()
-box.setSize(surf.width, surf.height)
-box.edgeSamplePts = 40
-box.vertSamplePts = 10
-box.r = CMAX
-box.g = CMAX
-box.b = CMAX
-
 ps.objects.append(ball)
 ps.objects.append(paddles[0])
 ps.objects.append(paddles[1])
 
 if DRAW_WALLS:
+	walls = []
+	for i in range(2):
+		wall = Wall(length=surf.width)
+		walls.append(wall)
+
+	walls[0].y = surf.yMax
+	walls[1].y = surf.yMin
+
 	ps.objects.append(walls[0])
 	ps.objects.append(walls[1])
 
 if DRAW_SURFACE_BOX:
+	box = Quad()
+	box.setSize(surf.width, surf.height)
+	box.edgeSamplePts = 40
+	box.vertSamplePts = 10
+	box.x = surf.center['x']
+	box.y = surf.center['y']
+	box.setColor(0, 0, CMAX)
+
 	ps.objects.append(box)
 
 def dac_thread():

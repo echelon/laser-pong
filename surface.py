@@ -9,7 +9,7 @@ class Surface(object):
 		self.yMax = maxY
 		self.yMin = minY
 
-		print self.xMax, self.xMin, self.yMax, self.yMin
+		print 'dimensions', self.xMax, self.xMin, self.yMax, self.yMin
 
 		self.width = abs(maxX - minX)
 		self.height = abs(maxY - minY)
@@ -18,6 +18,8 @@ class Surface(object):
 			'x': (maxX + minX)/2,
 			'y': (maxY + minY)/2,
 		}
+
+		print 'center', self.center
 
 		self.ratioFloat = self.width / (self.height*1.0)
 		self.ratio = int(round(self.ratioFloat))
