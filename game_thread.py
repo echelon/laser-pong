@@ -8,8 +8,8 @@ import time # for sleep
 # PONG CODES
 from configs import *
 from collision import *
-from configs import *
 from surface import *
+
 
 def game_thread(surface, ball, paddles):
 	"""
@@ -45,11 +45,11 @@ def game_thread(surface, ball, paddles):
 		if isRestarting:
 			if datetime.now() < lastOut + outWait1:
 				ball.skipDraw = True
+				ball.x = 0
+				ball.y = 0
 				time.sleep(THREAD_SLEEP_TIME)
 				continue
 			if datetime.now() < lastOut + outWait2:
-				ball.x = 0
-				ball.y = 0
 				ball.skipDraw = False
 				time.sleep(THREAD_SLEEP_TIME)
 				continue

@@ -22,6 +22,7 @@ from lib.shape import Shape
 # PONG CODES
 #from controller import setup_controls
 from game_thread import *
+from controller_thread import *
 from controller import *
 from configs import *
 from surface import *
@@ -46,7 +47,7 @@ ps.trackingSamplePts = 15
 ps.blankingSamplePts = 15
 
 surf = Surface(X_MAX, X_MIN, Y_MAX, Y_MIN)
-ballRadius = math.sqrt(surf.getArea()) / 20
+ballRadius = (math.sqrt(surf.getArea()) / 20) * BALL_RADIUS_MULT
 
 paddles = []
 for i in range(2):
@@ -90,49 +91,6 @@ if DRAW_WALLS:
 	ps.objects.append(walls[0])
 	ps.objects.append(walls[1])
 
-def controller_thread():
-	pygame.joystick.init()
-	pygame.display.init()
-
-	PADDLE_VEL = (math.sqrt(surf.getArea()) / 10) * PADDLE_VEL_MULT
-
-	# Wait until we have a joystick
-	# TODO: Doesn't account for unplugged. 
-	while not pygame.joystick.get_count():
-		print "No Joystick detected!"
-		time.sleep(5)
-
-	controls = []
-	controls.append(init_controls(0))
-	controls.append(init_controls(1))
-
-	while True:
-		e = pygame.event.get()
-
-		lVert, lHori, rVert, rHori = (0, 0, 0, 0)
-
-		for i in range(len(paddles)):
-
-			paddle = paddles[i]
-			control = controls[i]
-			lVert = control.getLeftVert()
-			rVert = control.getRightVert()
-
-			vert = lVert or rVert
-			y = paddle.y
-
-			y += vert * PADDLE_VEL
-
-			if surf.isAbove(y, paddle):
-				y = surf.topMost(paddle)
-			elif surf.isBelow(y, paddle):
-				y = surf.bottomMost(paddle)
-
-			paddle.y = y
-
-
-		time.sleep(0.02) # Keep this thread from hogging CPU
-
 def dac_thread():
 	global ps
 
@@ -156,7 +114,7 @@ GO, GO, GO!!!
 
 thread.start_new_thread(dac_thread, ())
 thread.start_new_thread(game_thread, (surf, ball, paddles))
-thread.start_new_thread(controller_thread, ())
+thread.start_new_thread(controller_thread, (surf, paddles))
 
 while True:
 	time.sleep(20000000)
