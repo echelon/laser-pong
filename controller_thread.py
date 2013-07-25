@@ -19,11 +19,21 @@ def controller_thread(surface, paddles):
 
 	PADDLE_VEL = (math.sqrt(surface.getArea()) / 10) * PADDLE_VEL_MULT
 
-	# Wait until we have a joystick
-	# TODO: Doesn't account for unplugged. 
-	while not pygame.joystick.get_count():
-		print "No Joystick detected!"
-		time.sleep(5)
+	#
+	# Wait until we have two joysticks
+	# Unfortunately, cannot reestablish connection to joystick if 
+	# unplugged without a ridiculously excessive quit()/init() loop :(
+	#
+	jCount = pygame.joystick.get_count()
+	while jCount < 2:
+		if jCount == 0:
+			print "No Joystick detected!"
+		else:
+			print "Only one Joystick detected!"
+		pygame.joystick.quit()
+		time.sleep(3)
+		pygame.joystick.init()
+		jCount = pygame.joystick.get_count()
 
 	controls = []
 	controls.append(init_controls(0))

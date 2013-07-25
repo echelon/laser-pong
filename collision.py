@@ -2,9 +2,6 @@
 import math
 import sys
 
-# TODO: Code won't work yet.
-# TODO: Code cleanup
-
 def is_collision(circle, rectangle):
 	"""
 	Elegant circle/rectangle intersection algorithm
