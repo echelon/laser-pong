@@ -92,9 +92,10 @@ def game_thread(surface, ball, paddles):
 				yVel *= -1
 
 			if surface.isLeft(x, ball) or surface.isRight(x, ball):
-				print 'OUT!', 'cur->new', ball.x, x
 				lastOut = datetime.now()
 				isRestarting = True
+				x = ball.x
+				y = ball.y
 
 		ball.x = x
 		ball.y = y

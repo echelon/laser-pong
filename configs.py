@@ -6,20 +6,19 @@ Game Configuration.
 	- And so forth...
 """
 
-DMAX = 30000
+dmax = 30000
+x_offset = 0
+y_offset = 0
 
 		# ===========================
 		# BASIC SURFACE CONFIGURATION
 		# ===========================
 
-x_offset = -10000
-y_offset = -10000
+Y_MAX = dmax / 5 + y_offset
+Y_MIN = -dmax / 5 + y_offset
 
-Y_MAX = DMAX / 5 + y_offset
-Y_MIN = -DMAX / 5 + y_offset
-
-X_MAX = DMAX / 5 + x_offset
-X_MIN = -DMAX / 5 + x_offset
+X_MAX = dmax / 2 + x_offset
+X_MIN = -dmax / 2 + x_offset
 
 		# ==========================
 		# VELOCITY MULTIPLIERS

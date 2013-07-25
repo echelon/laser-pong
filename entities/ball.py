@@ -48,8 +48,8 @@ class Ball(Entity):
 		# Bottom should be negative of relative (0, 0) coord!
 		self.top = self.radius
 		self.bottom = -self.radius
-		self.left = self.radius # TODO/FIXME: Correct?
-		self.right = -self.radius # TODO/FIXME: Correct?
+		self.left = -self.radius
+		self.right = self.radius
 
 	def produce(self):
 		"""
